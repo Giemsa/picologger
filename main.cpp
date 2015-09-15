@@ -4,12 +4,12 @@
 static const char *TAG = "picologger";
 
 // custom formatter
-struct CustomFormatter : public picologger::formetters::DefaultFormatter
+struct CustomFormatter : public picologger::formatters::DefaultFormatter
 {
     void format(std::ostream &os, const picologger::LogLevel::Type level, const std::string &str)
     {
         os << TAG << " | ";
-        picologger::formetters::DefaultFormatter::format(os, level, str);
+        picologger::formatters::DefaultFormatter::format(os, level, str);
     }
 };
 

@@ -3,7 +3,7 @@ picologger is a header only logger library for C++.
 
     using namespace picologger;
     Logger *logger = new Logger(
-        new formetters::DefaultFormatter(),
+        new formatters::DefaultFormatter(),
         new writers::DefaultWriter(std::cout));
 
     logger->error("error! %d", 0); // 01:59:20.128 [Error] error! 0

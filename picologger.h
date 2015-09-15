@@ -78,7 +78,7 @@ namespace picologger
         };
     }
 
-    namespace formetters
+    namespace formatters
     {
         struct DefaultFormatter : public picologger::Formatter
         {
@@ -138,7 +138,7 @@ namespace picologger
 
             if(!formatter_)
             {
-                formatter_ = new formetters::DefaultFormatter();
+                formatter_ = new formatters::DefaultFormatter();
             }
 
             std::ostringstream oss;
