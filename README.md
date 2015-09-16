@@ -1,5 +1,7 @@
 # picologger
-picologger is a header only logger library for C++.
+picologger is a compact logger library for C++ and Java. 
+
+C++:
 
     using namespace picologger;
     Logger *logger = new Logger(
@@ -7,6 +9,14 @@ picologger is a header only logger library for C++.
         new writers::DefaultWriter(std::cout));
 
     logger->error("error! %d", 0); // 01:59:20.128 [Error] error! 0
+
+Java:
+
+    Logger logger = new Logger(
+        new DefaultFormatter(),
+        new DefaultWriter(System.out));
+
+    logger.error("error! %d", 0); // 01:59:20.128 [Error] error! 0
 
 See main.cpp if you want more example.
 
