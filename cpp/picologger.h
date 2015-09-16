@@ -1,8 +1,5 @@
 /*
- * picologger
- * Copyright (C) 2015 Giemsa/MithrilWorks <mithrilworks@gmail.com>
- *
- * this software is distributed under the zlib/libpng license.
+ * original: https://github.com/Giemsa/picologger/blob/master/picologger.h
  */
 
 #ifndef MW_PICOLOGGER_H
@@ -121,9 +118,12 @@ namespace picologger
             }
         }
 
+        Logger(const Logger &);
+        Logger &operator=(const Logger &);
+    protected:
         void output(const LogLevel::Type level, const char *format, va_list args)
         {
-            if(!enabled_ || static_cast<int>(level) > static_cast<int>(logLevel_))
+            if(!formatter_ || !enabled_ || static_cast<int>(level) > static_cast<int>(logLevel_))
             {
                 return;
             }
@@ -136,11 +136,6 @@ namespace picologger
             char *buf = static_cast<char *>(alloca(len * sizeof(char)));
             vsnprintf(buf, len, format, args);
 
-            if(!formatter_)
-            {
-                formatter_ = new formatters::DefaultFormatter();
-            }
-
             std::ostringstream oss;
             formatter_->format(oss, level, buf);
             const std::string &str = oss.str();
@@ -149,9 +144,6 @@ namespace picologger
                 (*it)->write(str);
             }
         }
-
-        Logger(const Logger &);
-        Logger &operator=(const Logger &);
     public:
         Logger()
         : formatter_(NULL), enabled_(true), logLevel_(LogLevel::Info)
@@ -207,13 +199,13 @@ namespace picologger
     va_start(args, format);     \
     output(level, format, args);   \
     va_end(args);
-        void log(const LogLevel::Type level, const char *format, ...) { MW_PICOLOGGER_OUTPUT_(level) }
-        void fatal(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Fatal) }
-        void error(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Error) }
-        void warn(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Warn) }
-        void info(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Info) }
-        void debug(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Debug) }
-        void trace(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Trace) }
+        virtual void log(const LogLevel::Type level, const char *format, ...) { MW_PICOLOGGER_OUTPUT_(level) }
+        virtual void fatal(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Fatal) }
+        virtual void error(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Error) }
+        virtual void warn(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Warn) }
+        virtual void info(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Info) }
+        virtual void debug(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Debug) }
+        virtual void trace(const char *format, ...) { MW_PICOLOGGER_OUTPUT_(LogLevel::Trace) }
 #undef MW_PICOLOGGER_OUTPUT_
 
         void setEnabled(const bool enabled) { enabled_ = enabled; }
